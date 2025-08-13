@@ -116,7 +116,7 @@ class MaxwellEventExtractor(BaseEvent):
         channel_ids = np.zeros((0),dtype=int)
         if len(bits)>0:
             bit_state = bits["bits"]
-            channel_ids = int(np.unique(bit_state[bit_state != 0]))
+            channel_ids = np.unique(bit_state[bit_state != 0]).astype(dtype=int)
             if -1 in channel_ids or 1 in channel_ids:
                 raise ValueError("TTL bits cannot be -1 or 1.")
         
@@ -215,7 +215,7 @@ class MaxwellEventSegment(BaseEventSegment):
         event["time"] = bit_frameno.astype(dtype=float) / self.fs
         event["state"] = bit_state
         event["message"] = bit_message
-
+        
         if start_time is not None:
             event = event[event["time"] >= start_time]
         if end_time is not None:
